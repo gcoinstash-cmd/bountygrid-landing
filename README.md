@@ -1,11 +1,11 @@
 # BountyGrid OS — Landing Page
 
-Landing page for **BountyGrid OS** — Autonomous Codebase Maintenance & Issue Remediation.
+Landing page for **BountyGrid OS** — Continuous Codebase Maintenance & Rapid Issue Remediation.
 
 ## Features
-- Interactive Human-in-the-Loop Agentic Software Engineering overview
+- Interactive Test-Driven Software Engineering & Workflow Overview
 - Transparent Retainer & Issue Remediation service tiers with direct Stripe checkout hooks
-- Zero-AI-Slop Code Covenant & supported tech stack highlights
+- Zero-Regression Code Covenant & supported tech stack highlights
 - Formspree-powered Codebase Audit request intake form with real-time validation and asynchronous submission feedback
 
 ## Local Development
