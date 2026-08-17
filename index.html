@@ -44,6 +44,46 @@
     .glow-cyan {
       box-shadow: 0 0 40px -10px rgba(6, 182, 212, 0.25);
     }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      background: #232836;
+      height: 8px;
+      border-radius: 9999px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      margin-top: -6px;
+      background: #F59E0B;
+      height: 20px;
+      width: 20px;
+      border-radius: 9999px;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+      transition: transform 0.15s ease, background-color 0.15s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: #FBBF24;
+    }
+    input[type="range"]::-moz-range-track {
+      background: #232836;
+      height: 8px;
+      border-radius: 9999px;
+    }
+    input[type="range"]::-moz-range-thumb {
+      background: #F59E0B;
+      height: 20px;
+      width: 20px;
+      border-radius: 9999px;
+      border: none;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
+      transition: transform 0.15s ease;
+    }
   </style>
 </head>
 <body class="antialiased selection:bg-amber-500/20 selection:text-amber-300">
@@ -59,6 +99,7 @@
       </div>
       <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-400">
         <a href="#how-it-works" class="hover:text-amber-400 transition-colors">How It Works</a>
+        <a href="#calculator" class="hover:text-amber-400 transition-colors">ROI Calculator</a>
         <a href="#pricing" class="hover:text-amber-400 transition-colors">Retainers & Pricing</a>
         <a href="#quality" class="hover:text-amber-400 transition-colors">Quality Guarantee</a>
         <a href="#faq" class="hover:text-amber-400 transition-colors">FAQ</a>
@@ -164,6 +205,148 @@
             A dedicated Quality Director inspects the visual diff, verifies test outputs, and signs off before the Pull Request is pushed and merged into your repository.
           </p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROI & Engineering Debt Calculator Section -->
+  <section id="calculator" class="py-24 md:py-32 bg-brand-surface/30 border-b border-brand-border relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16 md:mb-20">
+        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-brand-surface border border-brand-border text-xs font-mono text-amber-400 mb-4">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>Interactive Savings Estimator</span>
+        </div>
+        <h2 class="text-3xl md:text-5xl font-bold text-white tracking-tight">Calculate Your Engineering ROI</h2>
+        <p class="text-slate-400 mt-4 text-base md:text-lg leading-relaxed">
+          See how much engineering capacity and budget your team recovers by offloading bug triage, reproduction tests, and backlog debt to BountyGrid OS.
+        </p>
+      </div>
+
+      <!-- Calculator Card Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        
+        <!-- Left: Interactive Controls -->
+        <div class="lg:col-span-6 p-8 md:p-10 rounded-3xl bg-brand-surface border border-brand-border flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <label for="issue-slider" class="text-xs font-mono font-bold uppercase tracking-wider text-slate-300">
+                Monthly Open Issues & Bugs
+              </label>
+              <div class="flex items-baseline space-x-1.5 bg-brand-card px-3.5 py-1.5 rounded-xl border border-brand-border">
+                <span id="issue-count-display" class="font-mono font-bold text-2xl text-amber-400">20</span>
+                <span class="text-xs font-mono text-slate-400">issues/mo</span>
+              </div>
+            </div>
+
+            <!-- Slider Container -->
+            <div class="py-6">
+              <input 
+                type="range" 
+                id="issue-slider" 
+                min="5" 
+                max="100" 
+                step="1" 
+                value="20"
+                class="w-full h-2 rounded-lg cursor-pointer"
+              >
+              <div class="flex justify-between text-xs font-mono text-slate-500 mt-3">
+                <span>5 issues</span>
+                <span>25</span>
+                <span>50</span>
+                <span>75</span>
+                <span>100 issues</span>
+              </div>
+            </div>
+
+            <!-- Assumptions & Cost Model Details -->
+            <div class="pt-6 border-t border-brand-border/60 space-y-3.5 text-xs text-slate-400">
+              <div class="flex items-center justify-between">
+                <span class="flex items-center space-x-1.5">
+                  <span class="text-slate-500 font-mono">▸</span>
+                  <span>Avg. In-House Triage & QA Time:</span>
+                </span>
+                <span class="font-mono font-semibold text-slate-300">5.5 hrs / issue</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="flex items-center space-x-1.5">
+                  <span class="text-slate-500 font-mono">▸</span>
+                  <span>Senior US Engineer Rate Benchmark:</span>
+                </span>
+                <span class="font-mono font-semibold text-slate-300">$95 / hr (~$150k loaded)</span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="flex items-center space-x-1.5">
+                  <span class="text-slate-500 font-mono">▸</span>
+                  <span>BountyGrid OS Quick-Strike Rate:</span>
+                </span>
+                <span class="font-mono font-semibold text-amber-400">$150 / verified PR</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-6 border-t border-brand-border/60 text-xs text-slate-500 font-mono flex items-center justify-between">
+            <span>Verified PR turnaround</span>
+            <span class="text-emerald-400 flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>100% Test Pass Guarantee</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Right: Results & ROI Breakdown -->
+        <div class="lg:col-span-6 p-8 md:p-10 rounded-3xl bg-brand-card border-2 border-amber-500/60 glow-amber flex flex-col justify-between relative">
+          <div>
+            <div class="text-xs font-mono uppercase text-amber-400 tracking-wider mb-1">Projected Cost & Time Savings</div>
+            <h3 class="text-2xl font-bold text-white mb-6">Net Engineering Reclaim</h3>
+
+            <!-- Key Metric: Hours Saved -->
+            <div class="p-6 rounded-2xl bg-brand-surface border border-brand-border mb-6">
+              <div class="text-xs font-mono uppercase text-slate-400 mb-1">Developer Hours Reclaimed</div>
+              <div class="flex items-baseline space-x-2">
+                <span id="hours-saved-display" class="text-4xl md:text-5xl font-extrabold font-mono text-cyan-400">110</span>
+                <span class="text-slate-400 text-sm font-mono">hrs / month</span>
+              </div>
+              <p class="text-xs text-slate-400 mt-2">
+                Equivalent to <strong id="fte-reclaimed" class="text-slate-200">~0.7 full-time engineer</strong> focused 100% on high-impact product roadmap features.
+              </p>
+            </div>
+
+            <!-- Cost Comparison Rows -->
+            <div class="space-y-3 mb-6">
+              <div class="flex items-center justify-between p-3.5 rounded-xl bg-brand-surface/60 border border-brand-border">
+                <span class="text-xs text-slate-400">Estimated In-House Cost:</span>
+                <span id="inhouse-cost-display" class="font-mono font-semibold text-rose-400 text-sm">$10,450 / mo</span>
+              </div>
+              <div class="flex items-center justify-between p-3.5 rounded-xl bg-brand-surface/60 border border-brand-border">
+                <span class="text-xs text-slate-400">BountyGrid OS Cost:</span>
+                <span id="bountygrid-cost-display" class="font-mono font-semibold text-white text-sm">$3,000 / mo</span>
+              </div>
+            </div>
+
+            <!-- Net Capital Savings Highlight -->
+            <div class="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <div class="text-xs font-mono uppercase text-emerald-400 tracking-wider">Estimated Monthly Capital Saved</div>
+                <div id="savings-month-display" class="text-3xl font-extrabold font-mono text-emerald-400">+$7,450</div>
+              </div>
+              <div class="sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-emerald-500/20">
+                <div class="text-[11px] font-mono uppercase text-slate-400">Annual Run-rate ROI</div>
+                <div id="savings-year-display" class="text-base font-bold font-mono text-slate-200">+$89,400 / yr</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-4">
+            <a href="#contact" class="w-full py-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-center font-bold text-sm transition-all shadow-lg shadow-amber-500/25 flex items-center justify-center space-x-2">
+              <span>Lock In Your Savings — Request Audit</span>
+              <span class="font-mono">→</span>
+            </a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -443,6 +626,44 @@
         submitSpinner.classList.add('hidden');
       }
     });
+
+    // Interactive ROI Calculator Logic
+    const issueSlider = document.getElementById('issue-slider');
+    const issueCountDisplay = document.getElementById('issue-count-display');
+    const hoursSavedDisplay = document.getElementById('hours-saved-display');
+    const fteReclaimed = document.getElementById('fte-reclaimed');
+    const inhouseCostDisplay = document.getElementById('inhouse-cost-display');
+    const bountygridCostDisplay = document.getElementById('bountygrid-cost-display');
+    const savingsMonthDisplay = document.getElementById('savings-month-display');
+    const savingsYearDisplay = document.getElementById('savings-year-display');
+
+    function updateCalculator() {
+      if (!issueSlider) return;
+      const issues = parseInt(issueSlider.value, 10);
+      const hoursPerIssue = 5.5;
+      const hourlyRate = 95;
+      const bgRate = 150;
+
+      const totalHours = Math.round(issues * hoursPerIssue);
+      const inhouseCost = Math.round(issues * hoursPerIssue * hourlyRate);
+      const bgCost = Math.round(issues * bgRate);
+      const monthlySavings = inhouseCost - bgCost;
+      const annualSavings = monthlySavings * 12;
+      const fte = (totalHours / 160).toFixed(1);
+
+      if (issueCountDisplay) issueCountDisplay.textContent = issues;
+      if (hoursSavedDisplay) hoursSavedDisplay.textContent = totalHours.toLocaleString();
+      if (fteReclaimed) fteReclaimed.textContent = `~${fte} full-time engineer${parseFloat(fte) === 1 ? '' : 's'}`;
+      if (inhouseCostDisplay) inhouseCostDisplay.textContent = `$${inhouseCost.toLocaleString()} / mo`;
+      if (bountygridCostDisplay) bountygridCostDisplay.textContent = `$${bgCost.toLocaleString()} / mo`;
+      if (savingsMonthDisplay) savingsMonthDisplay.textContent = `+$${monthlySavings.toLocaleString()}`;
+      if (savingsYearDisplay) savingsYearDisplay.textContent = `+$${annualSavings.toLocaleString()} / yr`;
+    }
+
+    if (issueSlider) {
+      issueSlider.addEventListener('input', updateCalculator);
+      updateCalculator();
+    }
   </script>
 
   <!-- Footer -->
@@ -456,6 +677,7 @@
       </div>
       <div class="flex flex-wrap items-center justify-center gap-6 text-slate-400 font-medium">
         <a href="#how-it-works" class="hover:text-amber-400 transition-colors">How It Works</a>
+        <a href="#calculator" class="hover:text-amber-400 transition-colors">ROI Calculator</a>
         <a href="#pricing" class="hover:text-amber-400 transition-colors">Retainers & Pricing</a>
         <a href="#quality" class="hover:text-amber-400 transition-colors">Quality Guarantee</a>
         <a href="#faq" class="hover:text-amber-400 transition-colors">FAQ</a>
