@@ -84,6 +84,22 @@
       box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
       transition: transform 0.15s ease;
     }
+    @keyframes marquee {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 30s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
   </style>
 </head>
 <body class="antialiased selection:bg-amber-500/20 selection:text-amber-300">
@@ -558,12 +574,154 @@
         <p class="text-slate-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-10">
           We reject unvetted, low-quality code that pollutes repositories. Every line of code shipped under the BountyGrid OS seal passes strict local unit testing and senior engineering verification.
         </p>
-        <div class="flex flex-wrap justify-center gap-3 font-mono text-xs">
-          <span class="px-3.5 py-1.5 rounded-lg bg-brand-black border border-brand-border text-slate-300">TypeScript / Node.js</span>
-          <span class="px-3.5 py-1.5 rounded-lg bg-brand-black border border-brand-border text-slate-300">Python / PyTest</span>
-          <span class="px-3.5 py-1.5 rounded-lg bg-brand-black border border-brand-border text-slate-300">Go / Rust</span>
-          <span class="px-3.5 py-1.5 rounded-lg bg-brand-black border border-brand-border text-slate-300">React / Next.js</span>
-          <span class="px-3.5 py-1.5 rounded-lg bg-brand-black border border-brand-border text-slate-300">PostgreSQL / Redis</span>
+        <!-- Infinite Tech Stack Marquee Animation -->
+        <div class="relative w-full overflow-hidden mt-6 pt-4 pb-2">
+          <!-- Left & Right Gradient Fade Masks -->
+          <div class="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-[#11131A] via-[#11131A]/80 to-transparent z-10"></div>
+          <div class="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-[#11131A] via-[#11131A]/80 to-transparent z-10"></div>
+
+          <!-- Marquee Track Wrapper -->
+          <div class="animate-marquee flex items-center space-x-4">
+            
+            <!-- Set 1 -->
+            <div class="flex items-center space-x-4">
+              <!-- TypeScript / Node.js -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#3178C6]/15 border border-[#3178C6]/30 flex items-center justify-center font-mono font-bold text-xs text-[#61DAFB] group-hover:scale-105 transition-transform">
+                  TS
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">TypeScript / Node.js</div>
+                  <div class="text-[10px] font-mono text-slate-400">Strict Type Safety &amp; ESM</div>
+                </div>
+              </div>
+
+              <!-- Python / PyTest -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#3776AB]/15 border border-[#3776AB]/30 flex items-center justify-center font-mono font-bold text-xs text-amber-400 group-hover:scale-105 transition-transform">
+                  PY
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">Python / PyTest</div>
+                  <div class="text-[10px] font-mono text-slate-400">AsyncIO &amp; Fixture Suites</div>
+                </div>
+              </div>
+
+              <!-- Go -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#00ADD8]/15 border border-[#00ADD8]/30 flex items-center justify-center font-mono font-bold text-xs text-cyan-300 group-hover:scale-105 transition-transform">
+                  GO
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">Go (Golang)</div>
+                  <div class="text-[10px] font-mono text-slate-400">Goroutine Concurrency &amp; CLI</div>
+                </div>
+              </div>
+
+              <!-- Rust -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#DEA584]/15 border border-[#DEA584]/30 flex items-center justify-center font-mono font-bold text-xs text-orange-300 group-hover:scale-105 transition-transform">
+                  RS
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">Rust / Cargo</div>
+                  <div class="text-[10px] font-mono text-slate-400">Zero-Cost Memory Safety</div>
+                </div>
+              </div>
+
+              <!-- React / Next.js -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#61DAFB]/15 border border-[#61DAFB]/30 flex items-center justify-center font-mono font-bold text-xs text-[#61DAFB] group-hover:scale-105 transition-transform">
+                  NX
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">React / Next.js</div>
+                  <div class="text-[10px] font-mono text-slate-400">SSR, RSC &amp; Hook Architecture</div>
+                </div>
+              </div>
+
+              <!-- PostgreSQL / Redis -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#4169E1]/15 border border-[#4169E1]/30 flex items-center justify-center font-mono font-bold text-xs text-indigo-300 group-hover:scale-105 transition-transform">
+                  DB
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">PostgreSQL / Redis</div>
+                  <div class="text-[10px] font-mono text-slate-400">ACID Migrations &amp; Distributed Caching</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Set 2 (Identical duplicate for seamless continuous loop) -->
+            <div class="flex items-center space-x-4" aria-hidden="true">
+              <!-- TypeScript / Node.js -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#3178C6]/15 border border-[#3178C6]/30 flex items-center justify-center font-mono font-bold text-xs text-[#61DAFB] group-hover:scale-105 transition-transform">
+                  TS
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">TypeScript / Node.js</div>
+                  <div class="text-[10px] font-mono text-slate-400">Strict Type Safety &amp; ESM</div>
+                </div>
+              </div>
+
+              <!-- Python / PyTest -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#3776AB]/15 border border-[#3776AB]/30 flex items-center justify-center font-mono font-bold text-xs text-amber-400 group-hover:scale-105 transition-transform">
+                  PY
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">Python / PyTest</div>
+                  <div class="text-[10px] font-mono text-slate-400">AsyncIO &amp; Fixture Suites</div>
+                </div>
+              </div>
+
+              <!-- Go -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#00ADD8]/15 border border-[#00ADD8]/30 flex items-center justify-center font-mono font-bold text-xs text-cyan-300 group-hover:scale-105 transition-transform">
+                  GO
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">Go (Golang)</div>
+                  <div class="text-[10px] font-mono text-slate-400">Goroutine Concurrency &amp; CLI</div>
+                </div>
+              </div>
+
+              <!-- Rust -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#DEA584]/15 border border-[#DEA584]/30 flex items-center justify-center font-mono font-bold text-xs text-orange-300 group-hover:scale-105 transition-transform">
+                  RS
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">Rust / Cargo</div>
+                  <div class="text-[10px] font-mono text-slate-400">Zero-Cost Memory Safety</div>
+                </div>
+              </div>
+
+              <!-- React / Next.js -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#61DAFB]/15 border border-[#61DAFB]/30 flex items-center justify-center font-mono font-bold text-xs text-[#61DAFB] group-hover:scale-105 transition-transform">
+                  NX
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">React / Next.js</div>
+                  <div class="text-[10px] font-mono text-slate-400">SSR, RSC &amp; Hook Architecture</div>
+                </div>
+              </div>
+
+              <!-- PostgreSQL / Redis -->
+              <div class="flex items-center space-x-3 px-5 py-3 rounded-2xl bg-brand-black/90 border border-brand-border hover:border-amber-500/50 hover:bg-brand-card transition-all duration-300 shadow-md group cursor-default">
+                <div class="w-8 h-8 rounded-xl bg-[#4169E1]/15 border border-[#4169E1]/30 flex items-center justify-center font-mono font-bold text-xs text-indigo-300 group-hover:scale-105 transition-transform">
+                  DB
+                </div>
+                <div class="text-left">
+                  <div class="font-bold text-xs text-white group-hover:text-amber-300 transition-colors">PostgreSQL / Redis</div>
+                  <div class="text-[10px] font-mono text-slate-400">ACID Migrations &amp; Distributed Caching</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
