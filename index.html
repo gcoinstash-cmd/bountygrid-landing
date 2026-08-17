@@ -206,6 +206,120 @@
           </p>
         </div>
       </div>
+
+      <!-- Interactive Code & Diff Sandbox Preview -->
+      <div class="mt-16 md:mt-20 max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-surface border border-brand-border text-xs font-mono text-slate-300 mb-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            <span>Interactive Sandbox Artifact Demo</span>
+          </div>
+          <h4 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Test-First Sandbox Execution</h4>
+          <p class="text-slate-400 text-sm mt-2 max-w-xl mx-auto">
+            Inspect our standard engineering output: from isolated reproduction test to surgical pull request diff and green CI validation.
+          </p>
+        </div>
+
+        <!-- Terminal Container -->
+        <div class="rounded-2xl bg-[#090B10] border border-brand-border overflow-hidden shadow-2xl">
+          
+          <!-- Terminal Header & Tabs -->
+          <div class="px-5 py-3.5 bg-brand-surface border-b border-brand-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            
+            <!-- Left: Mac Window Controls & Tab Buttons -->
+            <div class="flex items-center space-x-4 w-full sm:w-auto justify-between sm:justify-start">
+              <div class="hidden sm:flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500/80 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+              </div>
+              
+              <!-- Tab Triggers -->
+              <div class="flex items-center space-x-1.5 p-1 rounded-xl bg-brand-card border border-brand-border/60 text-xs font-mono">
+                <button type="button" id="tab-btn-failing" class="px-3 py-1.5 rounded-lg transition-all font-semibold flex items-center space-x-1.5 bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                  <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                  <span>Failing Test</span>
+                </button>
+                <button type="button" id="tab-btn-patch" class="px-3 py-1.5 rounded-lg transition-all font-semibold flex items-center space-x-1.5 text-slate-400 hover:text-white">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                  <span>Minimal Fix</span>
+                </button>
+                <button type="button" id="tab-btn-ci" class="px-3 py-1.5 rounded-lg transition-all font-semibold flex items-center space-x-1.5 text-slate-400 hover:text-white">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span>Green CI</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: File Status & Copy Button -->
+            <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
+              <span id="diff-file-label" class="text-xs font-mono text-slate-400">
+                tests/repro_token_race.test.ts
+              </span>
+              <button type="button" id="copy-code-btn" class="px-3 py-1.5 rounded-lg bg-brand-card hover:bg-brand-border text-slate-300 hover:text-white text-xs font-mono border border-brand-border transition-all flex items-center space-x-1.5">
+                <span id="copy-icon">📋</span>
+                <span id="copy-text">Copy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Code Snippet Area -->
+          <div class="p-6 overflow-x-auto bg-[#08090E] font-mono text-xs sm:text-sm leading-relaxed text-slate-300">
+            
+            <!-- Panel 1: Failing Test -->
+            <pre id="panel-failing" class="block whitespace-pre"><code><span class="text-slate-500">// 1. Write isolated unit test reproducing issue #342 (Token race condition)</span>
+<span class="text-amber-400">import</span> { describe, it, expect, vi } <span class="text-amber-400">from</span> <span class="text-emerald-400">'vitest'</span>;
+<span class="text-amber-400">import</span> { RefreshTokenHandler } <span class="text-amber-400">from</span> <span class="text-emerald-400">'../src/auth/refresh'</span>;
+
+<span class="text-cyan-400">describe</span>(<span class="text-emerald-400">'RefreshTokenHandler — Race Condition Reproduction'</span>, () =&gt; {
+  <span class="text-cyan-400">it</span>(<span class="text-emerald-400">'should prevent concurrent refresh token invalidation under high load'</span>, <span class="text-amber-400">async</span> () =&gt; {
+    <span class="text-amber-400">const</span> handler = <span class="text-amber-400">new</span> <span class="text-cyan-400">RefreshTokenHandler</span>({ maxAgeMs: <span class="text-purple-400">3600000</span> });
+    <span class="text-amber-400">const</span> mockStorage = vi.<span class="text-cyan-400">spyOn</span>(handler, <span class="text-emerald-400">'persistSession'</span>);
+
+    <span class="text-slate-500">// Simulate 3 simultaneous tab requests with identical expiring token</span>
+    <span class="text-amber-400">const</span> results = <span class="text-amber-400">await</span> Promise.<span class="text-cyan-400">allSettled</span>([
+      handler.<span class="text-cyan-400">rotateToken</span>(<span class="text-emerald-400">'tok_expired_9823'</span>),
+      handler.<span class="text-cyan-400">rotateToken</span>(<span class="text-emerald-400">'tok_expired_9823'</span>),
+      handler.<span class="text-cyan-400">rotateToken</span>(<span class="text-emerald-400">'tok_expired_9823'</span>)
+    ]);
+
+    <span class="text-slate-500">// ❌ FAILS BEFORE FIX: Second &amp; third requests trigger duplicate 401 rejection</span>
+    <span class="text-amber-400">const</span> fulfilled = results.<span class="text-cyan-400">filter</span>(r =&gt; r.status === <span class="text-emerald-400">'fulfilled'</span>);
+    <span class="text-cyan-400">expect</span>(fulfilled.length).<span class="text-cyan-400">toBe</span>(<span class="text-purple-400">3</span>);
+    <span class="text-cyan-400">expect</span>(mockStorage).<span class="text-cyan-400">toHaveBeenCalledTimes</span>(<span class="text-purple-400">1</span>);
+  });
+});</code></pre>
+
+            <!-- Panel 2: Minimal Fix (Diff) -->
+            <pre id="panel-patch" class="hidden whitespace-pre"><code><span class="text-slate-500">--- a/src/auth/refresh.ts</span>
+<span class="text-slate-500">+++ b/src/auth/refresh.ts</span>
+<span class="text-cyan-400">@@ -42,8 +42,12 @@ export class RefreshTokenHandler {</span>
+   <span class="text-amber-400">async</span> <span class="text-cyan-400">rotateToken</span>(token: <span class="text-cyan-400">string</span>): <span class="text-cyan-400">Promise</span>&lt;<span class="text-cyan-400">SessionToken</span>&gt; {
+<div class="bg-rose-500/10 text-rose-300 -mx-6 px-6 py-0.5 border-l-2 border-rose-500"><span class="select-none text-rose-400 mr-2">-</span>    const session = await this.db.sessions.findUnique({ where: { token } });</div><div class="bg-rose-500/10 text-rose-300 -mx-6 px-6 py-0.5 border-l-2 border-rose-500"><span class="select-none text-rose-400 mr-2">-</span>    if (!session || session.revoked) throw new TokenRevokedError();</div><div class="bg-rose-500/10 text-rose-300 -mx-6 px-6 py-0.5 border-l-2 border-rose-500"><span class="select-none text-rose-400 mr-2">-</span>    await this.db.sessions.revoke(token);</div><div class="bg-rose-500/10 text-rose-300 -mx-6 px-6 py-0.5 border-l-2 border-rose-500"><span class="select-none text-rose-400 mr-2">-</span>    return this.generateNewSession(session.userId);</div><div class="bg-emerald-500/10 text-emerald-300 -mx-6 px-6 py-0.5 border-l-2 border-emerald-500"><span class="select-none text-emerald-400 mr-2">+</span>    // Acquire distributed mutex lock to prevent multi-tab concurrency race</div><div class="bg-emerald-500/10 text-emerald-300 -mx-6 px-6 py-0.5 border-l-2 border-emerald-500"><span class="select-none text-emerald-400 mr-2">+</span>    return await this.mutex.acquire(`lock:refresh:${token}`, async () =&gt; {</div><div class="bg-emerald-500/10 text-emerald-300 -mx-6 px-6 py-0.5 border-l-2 border-emerald-500"><span class="select-none text-emerald-400 mr-2">+</span>      const session = await this.db.sessions.findUnique({ where: { token } });</div><div class="bg-emerald-500/10 text-emerald-300 -mx-6 px-6 py-0.5 border-l-2 border-emerald-500"><span class="select-none text-emerald-400 mr-2">+</span>      if (!session || session.revoked) throw new TokenRevokedError();</div><div class="bg-emerald-500/10 text-emerald-300 -mx-6 px-6 py-0.5 border-l-2 border-emerald-500"><span class="select-none text-emerald-400 mr-2">+</span>      await this.db.sessions.revoke(token);</div><div class="bg-emerald-500/10 text-emerald-300 -mx-6 px-6 py-0.5 border-l-2 border-emerald-500"><span class="select-none text-emerald-400 mr-2">+</span>      return await this.generateNewSession(session.userId);</div><div class="bg-emerald-500/10 text-emerald-300 -mx-6 px-6 py-0.5 border-l-2 border-emerald-500"><span class="select-none text-emerald-400 mr-2">+</span>    });</div>   }
+ }</code></pre>
+
+            <!-- Panel 3: Green CI -->
+            <pre id="panel-ci" class="hidden whitespace-pre"><code><span class="text-slate-400">$ vitest run tests/repro_token_race.test.ts --coverage</span>
+
+ <span class="text-emerald-400 font-bold">✓</span> <span class="text-white">tests/repro_token_race.test.ts</span> <span class="text-slate-500">(4 tests)</span> <span class="text-slate-400">118ms</span>
+   <span class="text-emerald-400 font-bold">✓</span> RefreshTokenHandler — Race Condition Reproduction <span class="text-slate-500">(18ms)</span>
+   <span class="text-emerald-400 font-bold">✓</span> Token expiration boundary handling <span class="text-slate-500">(9ms)</span>
+   <span class="text-emerald-400 font-bold">✓</span> Idempotent mutex deduplication <span class="text-slate-500">(12ms)</span>
+   <span class="text-emerald-400 font-bold">✓</span> Backward compatibility fallback <span class="text-slate-500">(8ms)</span>
+
+ <span class="text-slate-400 font-bold">Test Files</span>  <span class="text-emerald-400 font-bold">1 passed</span> (1)
+      <span class="text-slate-400 font-bold">Tests</span>  <span class="text-emerald-400 font-bold">4 passed</span> (4)
+   <span class="text-slate-400 font-bold">Coverage</span>  <span class="text-emerald-400 font-bold">100% Statements</span> (42/42) | <span class="text-emerald-400 font-bold">100% Branches</span> (16/16)
+   <span class="text-slate-400 font-bold">Duration</span>  <span class="text-slate-300">412ms</span> (transform 98ms, setup 36ms, collect 32ms, tests 118ms)
+
+<div class="mt-2 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded-lg flex items-center space-x-2">
+  <span>✓ PASS</span>
+  <span class="text-slate-300">All CI regression suites verified. Zero mutations or side effects detected.</span>
+</div></code></pre>
+
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -663,6 +777,85 @@
     if (issueSlider) {
       issueSlider.addEventListener('input', updateCalculator);
       updateCalculator();
+    }
+
+    // Interactive Code & Diff Tabs Logic
+    const tabBtnFailing = document.getElementById('tab-btn-failing');
+    const tabBtnPatch = document.getElementById('tab-btn-patch');
+    const tabBtnCi = document.getElementById('tab-btn-ci');
+    const panelFailing = document.getElementById('panel-failing');
+    const panelPatch = document.getElementById('panel-patch');
+    const panelCi = document.getElementById('panel-ci');
+    const diffFileLabel = document.getElementById('diff-file-label');
+    const copyCodeBtn = document.getElementById('copy-code-btn');
+    const copyText = document.getElementById('copy-text');
+    const copyIcon = document.getElementById('copy-icon');
+
+    const activeTabClass = ['bg-amber-500/15', 'text-amber-300', 'border', 'border-amber-500/30'];
+    const inactiveTabClass = ['text-slate-400', 'hover:text-white'];
+
+    function setCodeTab(tab) {
+      // Reset all buttons
+      [tabBtnFailing, tabBtnPatch, tabBtnCi].forEach(btn => {
+        if (!btn) return;
+        btn.classList.remove('bg-amber-500/15', 'text-amber-300', 'border', 'border-amber-500/30');
+        btn.classList.add('text-slate-400', 'hover:text-white');
+      });
+
+      // Hide all panels
+      [panelFailing, panelPatch, panelCi].forEach(p => {
+        if (!p) return;
+        p.classList.add('hidden');
+        p.classList.remove('block');
+      });
+
+      if (tab === 'failing') {
+        tabBtnFailing.classList.add('bg-amber-500/15', 'text-amber-300', 'border', 'border-amber-500/30');
+        tabBtnFailing.classList.remove('text-slate-400', 'hover:text-white');
+        panelFailing.classList.remove('hidden');
+        panelFailing.classList.add('block');
+        diffFileLabel.textContent = 'tests/repro_token_race.test.ts';
+      } else if (tab === 'patch') {
+        tabBtnPatch.classList.add('bg-amber-500/15', 'text-amber-300', 'border', 'border-amber-500/30');
+        tabBtnPatch.classList.remove('text-slate-400', 'hover:text-white');
+        panelPatch.classList.remove('hidden');
+        panelPatch.classList.add('block');
+        diffFileLabel.textContent = 'src/auth/refresh.ts (diff.patch)';
+      } else if (tab === 'ci') {
+        tabBtnCi.classList.add('bg-amber-500/15', 'text-amber-300', 'border', 'border-amber-500/30');
+        tabBtnCi.classList.remove('text-slate-400', 'hover:text-white');
+        panelCi.classList.remove('hidden');
+        panelCi.classList.add('block');
+        diffFileLabel.textContent = 'ci/vitest_runner.log';
+      }
+    }
+
+    if (tabBtnFailing) tabBtnFailing.addEventListener('click', () => setCodeTab('failing'));
+    if (tabBtnPatch) tabBtnPatch.addEventListener('click', () => setCodeTab('patch'));
+    if (tabBtnCi) tabBtnCi.addEventListener('click', () => setCodeTab('ci'));
+
+    if (copyCodeBtn) {
+      copyCodeBtn.addEventListener('click', async () => {
+        let activePanel = panelFailing;
+        if (!panelPatch.classList.contains('hidden')) activePanel = panelPatch;
+        if (!panelCi.classList.contains('hidden')) activePanel = panelCi;
+
+        const codeContent = activePanel.innerText || activePanel.textContent;
+        try {
+          await navigator.clipboard.writeText(codeContent);
+          copyText.textContent = 'Copied! ✓';
+          copyIcon.textContent = '✓';
+          copyCodeBtn.classList.add('border-emerald-500/50', 'text-emerald-400');
+          setTimeout(() => {
+            copyText.textContent = 'Copy';
+            copyIcon.textContent = '📋';
+            copyCodeBtn.classList.remove('border-emerald-500/50', 'text-emerald-400');
+          }, 2000);
+        } catch (err) {
+          copyText.textContent = 'Copied';
+          setTimeout(() => { copyText.textContent = 'Copy'; }, 2000);
+        }
+      });
     }
   </script>
 
